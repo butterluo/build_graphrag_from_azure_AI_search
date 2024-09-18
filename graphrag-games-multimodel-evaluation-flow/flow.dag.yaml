@@ -1,0 +1,46 @@
+$schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  question:
+    type: string
+    default: 龙怎么变回人？
+  gameName:
+    type: string
+    defualt: 原神
+    default: 原神
+  imageUrl:
+    type: string
+    default: "[https://img2.tapimg.com/moment/etag/Fme2559259AZ0zKdWCiOLr_hloup.jpg]"
+  answer:
+    type: string
+    default: 长按跳跃键即可变回人形.
+outputs:
+  results:
+    type: string
+    reference: ${qa_text_line_process.output}
+nodes:
+- name: aggregate
+  type: python
+  source:
+    type: code
+    path: aggregate.py
+  inputs:
+    processed_results: ${qa_text_line_process.output}
+  outputs:
+    aggregateResult:
+      type: AggregateResult
+      properties:
+        accuracy: float
+        aggregated_result: float
+  aggregation: true
+- name: qa_text_line_process
+  type: python
+  source:
+    type: code
+    path: qa_text_line_process.py
+  inputs:
+    question: ${inputs.question}
+    gameName: ${inputs.gameName}
+    imageUrl: ${inputs.imageUrl}
+    answer: ${inputs.answer}
