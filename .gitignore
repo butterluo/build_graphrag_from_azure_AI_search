@@ -9,8 +9,3 @@ __pycache__
 nohup.out
 settings.yaml
 .promptflow
-ragtest/cache
-ragtest/cache/claim_extraction/
-ragtest/cache/*
-search_export/
-ragtest

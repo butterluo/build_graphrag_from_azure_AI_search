@@ -1,0 +1,216 @@
+
+-Goal-
+Given a text document that is potentially relevant to this activity, first identify all entities needed from the text in order to capture the information and ideas in the text.
+Next, report all relationships among the identified entities.
+
+-Steps-
+1. Identify all entities. For each identified entity, extract the following information:
+- entity_name: Name of the entity, capitalized
+- entity_type: Suggest several labels or categories for the entity. The categories should not be specific, but should be as general as possible.
+- entity_description: Comprehensive description of the entity's attributes and activities
+Format each entity as ("entity"{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_description>)
+
+2. From the entities identified in step 1, identify all pairs of (source_entity, target_entity) that are *clearly related* to each other.
+For each pair of related entities, extract the following information:
+- source_entity: name of the source entity, as identified in step 1
+- target_entity: name of the target entity, as identified in step 1
+- relationship_description: explanation as to why you think the source entity and the target entity are related to each other
+- relationship_strength: a numeric score indicating strength of the relationship between the source entity and target entity
+Format each relationship as ("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_strength>)
+
+3. Return output in Chinese as a single list of all the entities and relationships identified in steps 1 and 2. Use **{record_delimiter}** as the list delimiter.
+
+4. If you have to translate into Chinese, just translate the descriptions, nothing else!
+
+5. When finished, output {completion_delimiter}.
+
+-Examples-
+######################
+
+Example 1:
+
+text:
+连携技击破才能打出来，但是你游击破角色本身就少，小怪可以用击破角色直接打出连携，精英怪刚a两下就出黄光切人，切人就加击破条和失衡值，切个一轮基本就击破了，击破就是连携技，全是看动画，动画看完看血条右边有个小圈就是异常值，切那个属性的角色出来放个技能a两下满了继续上面的流程
+新世代动作游戏，看动画占了一大半时间，最难的操作就是盯着黄光切人
+------------------------
+output:
+("entity"{tuple_delimiter}连携技{tuple_delimiter}MECHANIC{tuple_delimiter}一种在游戏中通过特定操作触发的技能，通常需要击破敌人才能使用)
+{record_delimiter}
+("entity"{tuple_delimiter}击破角色{tuple_delimiter}CHARACTER{tuple_delimiter}在游戏中专门用于击破敌人的角色)
+{record_delimiter}
+("entity"{tuple_delimiter}小怪{tuple_delimiter}ENEMY{tuple_delimiter}游戏中的普通敌人，通常较弱)
+{record_delimiter}
+("entity"{tuple_delimiter}精英怪{tuple_delimiter}ENEMY{tuple_delimiter}游戏中的强大敌人，通常比小怪更难对付)
+{record_delimiter}
+("entity"{tuple_delimiter}黄光{tuple_delimiter}MECHANIC{tuple_delimiter}游戏中提示玩家切换角色的视觉信号)
+{record_delimiter}
+("entity"{tuple_delimiter}击破条{tuple_delimiter}MECHANIC{tuple_delimiter}游戏中用于显示敌人被击破进度的条形图)
+{record_delimiter}
+("entity"{tuple_delimiter}失衡值{tuple_delimiter}MECHANIC{tuple_delimiter}游戏中用于显示敌人失去平衡状态的数值)
+{record_delimiter}
+("entity"{tuple_delimiter}异常值{tuple_delimiter}MECHANIC{tuple_delimiter}游戏中用于显示敌人异常状态的数值)
+{record_delimiter}
+("entity"{tuple_delimiter}新世代动作游戏{tuple_delimiter}GAME{tuple_delimiter}一种现代的动作类电子游戏，强调视觉效果和角色切换)
+{record_delimiter}
+("relationship"{tuple_delimiter}连携技{tuple_delimiter}击破角色{tuple_delimiter}连携技需要通过击破角色来触发{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}击破角色{tuple_delimiter}小怪{tuple_delimiter}击破角色可以直接击破小怪{tuple_delimiter}6)
+{record_delimiter}
+("relationship"{tuple_delimiter}精英怪{tuple_delimiter}黄光{tuple_delimiter}精英怪在被攻击时会触发黄光提示{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}黄光{tuple_delimiter}击破条{tuple_delimiter}黄光提示玩家切换角色以增加击破条{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}黄光{tuple_delimiter}失衡值{tuple_delimiter}黄光提示玩家切换角色以增加失衡值{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}异常值{tuple_delimiter}击破角色{tuple_delimiter}击破角色可以通过技能增加异常值{tuple_delimiter}6)
+{record_delimiter}
+("relationship"{tuple_delimiter}新世代动作游戏{tuple_delimiter}连携技{tuple_delimiter}新世代动作游戏中连携技占据了大量时间{tuple_delimiter}5)
+{record_delimiter}
+("relationship"{tuple_delimiter}新世代动作游戏{tuple_delimiter}黄光{tuple_delimiter}新世代动作游戏中黄光是重要的操作提示{tuple_delimiter}5)
+{completion_delimiter}
+#############################
+
+
+Example 2:
+
+text:
+转自台服wiki～
+宠物推荐【输出】
+主战推荐 : 魔魔狗
+【坦克】
+主战推荐 : 利爪剑犬(觉醒有减伤)
+辅助宠物 : 不限技能推荐搭配
+0转-剑士【输出】
+核心技能 : 迅雷突刺
+战术技能 : 雷电之力、震天憾地、惊雷击
+被动技能 : 电能进发、狂战士、雷霆万钧、零度闪击、势不可挡
+【坦克】
+核心技能 : 迅雷突刺
+战术技能 : 坚韧护盾、勇气战旗、战吼
+被动技能 : 无畏先锋、刃甲、奋战(其他随意)
+天赋：待补充1转-剑客【输出】
+核心技能 : 盾牌猛击
+战术技能 : 裂地斩、碎盾震击、无尽怒火
+被动技能 : 狂战士、粉碎大地、战术优势、天降正义、强烈猛击
+【坦克】
+核心技能 : 盾牌猛击
+战术技能 : 坚�
+------------------------
+output:
+("entity"{tuple_delimiter}台服wiki{tuple_delimiter}SOURCE{tuple_delimiter}台服wiki是一个提供游戏信息和指南的在线资源)
+{record_delimiter}
+("entity"{tuple_delimiter}宠物{tuple_delimiter}GAME ELEMENT{tuple_delimiter}在游戏中，宠物可以提供不同的战斗和辅助功能)
+{record_delimiter}
+("entity"{tuple_delimiter}魔魔狗{tuple_delimiter}PET{tuple_delimiter}魔魔狗是推荐的主战输出宠物)
+{record_delimiter}
+("entity"{tuple_delimiter}利爪剑犬{tuple_delimiter}PET{tuple_delimiter}利爪剑犬是推荐的主战坦克宠物，觉醒后有减伤效果)
+{record_delimiter}
+("entity"{tuple_delimiter}剑士{tuple_delimiter}CLASS{tuple_delimiter}剑士是游戏中的一个职业，具有输出和坦克两种角色)
+{record_delimiter}
+("entity"{tuple_delimiter}剑客{tuple_delimiter}CLASS{tuple_delimiter}剑客是剑士职业的一转进阶，具有输出和坦克两种角色)
+{record_delimiter}
+("entity"{tuple_delimiter}迅雷突刺{tuple_delimiter}SKILL{tuple_delimiter}迅雷突刺是剑士和剑客的核心技能)
+{record_delimiter}
+("entity"{tuple_delimiter}雷电之力{tuple_delimiter}SKILL{tuple_delimiter}雷电之力是剑士的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}震天憾地{tuple_delimiter}SKILL{tuple_delimiter}震天憾地是剑士的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}惊雷击{tuple_delimiter}SKILL{tuple_delimiter}惊雷击是剑士的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}电能进发{tuple_delimiter}SKILL{tuple_delimiter}电能进发是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}狂战士{tuple_delimiter}SKILL{tuple_delimiter}狂战士是剑士和剑客的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}雷霆万钧{tuple_delimiter}SKILL{tuple_delimiter}雷霆万钧是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}零度闪击{tuple_delimiter}SKILL{tuple_delimiter}零度闪击是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}势不可挡{tuple_delimiter}SKILL{tuple_delimiter}势不可挡是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}坚韧护盾{tuple_delimiter}SKILL{tuple_delimiter}坚韧护盾是剑士的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}勇气战旗{tuple_delimiter}SKILL{tuple_delimiter}勇气战旗是剑士的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}战吼{tuple_delimiter}SKILL{tuple_delimiter}战吼是剑士的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}无畏先锋{tuple_delimiter}SKILL{tuple_delimiter}无畏先锋是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}刃甲{tuple_delimiter}SKILL{tuple_delimiter}刃甲是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}奋战{tuple_delimiter}SKILL{tuple_delimiter}奋战是剑士的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}盾牌猛击{tuple_delimiter}SKILL{tuple_delimiter}盾牌猛击是剑客的核心技能)
+{record_delimiter}
+("entity"{tuple_delimiter}裂地斩{tuple_delimiter}SKILL{tuple_delimiter}裂地斩是剑客的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}碎盾震击{tuple_delimiter}SKILL{tuple_delimiter}碎盾震击是剑客的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}无尽怒火{tuple_delimiter}SKILL{tuple_delimiter}无尽怒火是剑客的战术技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}粉碎大地{tuple_delimiter}SKILL{tuple_delimiter}粉碎大地是剑客的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}战术优势{tuple_delimiter}SKILL{tuple_delimiter}战术优势是剑客的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}天降正义{tuple_delimiter}SKILL{tuple_delimiter}天降正义是剑客的被动技能之一)
+{record_delimiter}
+("entity"{tuple_delimiter}强烈猛击{tuple_delimiter}SKILL{tuple_delimiter}强烈猛击是剑客的被动技能之一)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}迅雷突刺{tuple_delimiter}迅雷突刺是剑士的核心技能{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}迅雷突刺{tuple_delimiter}迅雷突刺是剑客的核心技能{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}雷电之力{tuple_delimiter}雷电之力是剑士的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}震天憾地{tuple_delimiter}震天憾地是剑士的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}惊雷击{tuple_delimiter}惊雷击是剑士的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}电能进发{tuple_delimiter}电能进发是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}狂战士{tuple_delimiter}狂战士是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}雷霆万钧{tuple_delimiter}雷霆万钧是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}零度闪击{tuple_delimiter}零度闪击是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}势不可挡{tuple_delimiter}势不可挡是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}坚韧护盾{tuple_delimiter}坚韧护盾是剑士的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}勇气战旗{tuple_delimiter}勇气战旗是剑士的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}战吼{tuple_delimiter}战吼是剑士的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}无畏先锋{tuple_delimiter}无畏先锋是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}刃甲{tuple_delimiter}刃甲是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑士{tuple_delimiter}奋战{tuple_delimiter}奋战是剑士的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}盾牌猛击{tuple_delimiter}盾牌猛击是剑客的核心技能{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}裂地斩{tuple_delimiter}裂地斩是剑客的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}碎盾震击{tuple_delimiter}碎盾震击是剑客的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}无尽怒火{tuple_delimiter}无尽怒火是剑客的战术技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}狂战士{tuple_delimiter}狂战士是剑客的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}粉碎大地{tuple_delimiter}粉碎大地是剑客的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}战术优势{tuple_delimiter}战术优势是剑客的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}天降正义{tuple_delimiter}天降正义是剑客的被动技能之一{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}剑客{tuple_delimiter}强烈猛击{tuple_delimiter}强烈猛击是剑客的被动技能之一{tuple_delimiter}7)
+{completion_delimiter}
+#############################
+
+
+
+-Real Data-
+######################
+text: {input_text}
+######################
+output:
