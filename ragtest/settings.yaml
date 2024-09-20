@@ -1,40 +1,44 @@
-encoding_model: o200k_base
+
+encoding_model: cl100k_base
 skip_workflows: []
 llm:
-  api_key: XXXXXX
-  type: azure_openai_chat # or azure_openai_chat
-  model: gpt-4o
+  api_key: ${GRAPHRAG_API_KEY}
+  type: azure_openai_chat #openai_chat # or azure_openai_chat
+  model: gpt-4
   model_supports_json: true # recommended if this is available for your model.
-  max_tokens: 4000
-  request_timeout: 180.0
-  api_base: https://XXXXX.openai.azure.com/
+  # max_tokens: 4000
+  # request_timeout: 180.0
+  api_base: https://aoai-tst1.openai.azure.com/
   api_version: 2024-02-15-preview
   # organization: <organization_id>
-  deployment_name: gpt-4o
+  deployment_name: gpt-4
   tokens_per_minute: 300_000 # set a leaky bucket throttle
   requests_per_minute: 3_000 # set a leaky bucket throttle
   max_retries: 10
   max_retry_wait: 60.0
   sleep_on_rate_limit_recommendation: true # whether to sleep when azure suggests wait-times
-  concurrent_requests: 50 # the number of parallel inflight requests that may be made
+  concurrent_requests: 38 # the number of parallel inflight requests that may be made
   temperature: 0 # temperature for sampling
   top_p: 1 # top-p sampling
   n: 1 # Number of completions to generate
 
 parallelization:
   stagger: 0.3
-  num_threads: 50 # the number of threads to use for parallel processing
+  num_threads: 60 # the number of threads to use for parallel processing
 
 async_mode: threaded # or asyncio
 
 embeddings:
   ## parallelization: override the global parallelization settings for embeddings
   async_mode: threaded # or asyncio
+  # target: required # or all
+  # batch_size: 16 # the number of documents to send in a single request
+  # batch_max_tokens: 8191 # the maximum number of tokens to send in a single request
   llm:
-    api_key: XXXXXX
-    type: azure_openai_embedding # or azure_openai_embedding
+    api_key: ${GRAPHRAG_API_KEY}
+    type: azure_openai_embedding #openai_embedding # or azure_openai_embedding
     model: text-embedding-3-small
-    api_base: https://XXXXX.openai.azure.com/
+    api_base: https://aoai-tst1.openai.azure.com/
     api_version: 2024-02-15-preview
     # organization: <organization_id>
     deployment_name: text-embedding-3-small
@@ -43,23 +47,20 @@ embeddings:
     max_retries: 10
     max_retry_wait: 60.0
     sleep_on_rate_limit_recommendation: true # whether to sleep when azure suggests wait-times
-    concurrent_requests: 75 # the number of parallel inflight requests that may be made
-    # batch_size: 16 # the number of documents to send in a single request
-    batch_max_tokens: 8191 # the maximum number of tokens to send in a single request
-    # target: required # or optional
+    concurrent_requests: 60 # the number of parallel inflight requests that may be made
+    
   
 
 
 chunks:
   size: 120000
   overlap: 100
-  encoding_model: "o200k_base"
   group_by_columns: [id] # by default, we don't allow chunks to cross documents
     
 input:
   type: file # or blob
   file_type: text # or csv
-  base_dir: "/home/azureuser/build_graphrag_from_azure_AI_search/search_export/"
+  base_dir: "/home/luogang/SRC/NLP/LLM/build_graphrag_from_azure_AI_search/search_export/"
   file_encoding: utf-8
   file_pattern: ".*\\.txt$"
 
@@ -82,6 +83,8 @@ reporting:
   # container_name: <azure_blob_storage_container_name>
 
 entity_extraction:
+  ## strategy: fully override the entity extraction strategy.
+  ##   type: one of graph_intelligence, graph_intelligence_json and nltk
   ## llm: override the global llm settings for this task
   ## parallelization: override the global parallelization settings for this task
   ## async_mode: override the global async_mode settings for this task
@@ -93,7 +96,6 @@ summarize_descriptions:
   ## llm: override the global llm settings for this task
   ## parallelization: override the global parallelization settings for this task
   ## async_mode: override the global async_mode settings for this task
-  encoding_model: "o200k_base"
   prompt: "prompts/tuned-prompts/summarize_descriptions.txt"
   max_length: 500
 
@@ -103,7 +105,6 @@ claim_extraction:
   ## async_mode: override the global async_mode settings for this task
   enabled: true
   prompt: "prompts/claim_extraction.txt"
-  encoding_model: "o200k_base"
   description: "Any claims or facts that could be relevant to information discovery."
   max_gleanings: 1
 
@@ -112,7 +113,6 @@ community_reports:
   ## parallelization: override the global parallelization settings for this task
   ## async_mode: override the global async_mode settings for this task
   prompt: "prompts/tuned-prompts/community_report.txt"
-  encoding_model: "o200k_base"
   max_length: 2000
   max_input_length: 8000
 

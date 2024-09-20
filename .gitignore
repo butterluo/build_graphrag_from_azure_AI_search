@@ -8,3 +8,8 @@ __pycache__/
 __pycache__
 nohup.out
 .promptflow
+output/
+cache/
+.env
+search_export
+log.txt
