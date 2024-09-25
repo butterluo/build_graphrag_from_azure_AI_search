@@ -12,4 +12,5 @@ output/
 cache/
 .env
 search_export
+nohup.out
 log.txt

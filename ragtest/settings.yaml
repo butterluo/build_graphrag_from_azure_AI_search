@@ -12,19 +12,19 @@ llm:
   api_version: 2024-02-15-preview
   # organization: <organization_id>
   deployment_name: gpt-4
-  tokens_per_minute: 300_000 # set a leaky bucket throttle
-  requests_per_minute: 3_000 # set a leaky bucket throttle
+  tokens_per_minute: 450_000 # set a leaky bucket throttle
+  requests_per_minute: 2_700 # set a leaky bucket throttle
   max_retries: 10
   max_retry_wait: 60.0
   sleep_on_rate_limit_recommendation: true # whether to sleep when azure suggests wait-times
-  concurrent_requests: 38 # the number of parallel inflight requests that may be made
+  concurrent_requests: 200 # the number of parallel inflight requests that may be made
   temperature: 0 # temperature for sampling
   top_p: 1 # top-p sampling
   n: 1 # Number of completions to generate
 
 parallelization:
   stagger: 0.3
-  num_threads: 60 # the number of threads to use for parallel processing
+  num_threads: 12 # the number of threads to use for parallel processing
 
 async_mode: threaded # or asyncio
 
@@ -47,7 +47,7 @@ embeddings:
     max_retries: 10
     max_retry_wait: 60.0
     sleep_on_rate_limit_recommendation: true # whether to sleep when azure suggests wait-times
-    concurrent_requests: 60 # the number of parallel inflight requests that may be made
+    concurrent_requests: 100 # the number of parallel inflight requests that may be made
     
   
 
@@ -102,6 +102,9 @@ summarize_descriptions:
 claim_extraction:
   ## llm: override the global llm settings for this task
   ## parallelization: override the global parallelization settings for this task
+  parallelization:
+    stagger: 0.3
+    num_threads: 48
   ## async_mode: override the global async_mode settings for this task
   enabled: true
   prompt: "prompts/claim_extraction.txt"
@@ -111,6 +114,9 @@ claim_extraction:
 community_reports:
   ## llm: override the global llm settings for this task
   ## parallelization: override the global parallelization settings for this task
+  parallelization:
+    stagger: 0.3
+    num_threads: 64
   ## async_mode: override the global async_mode settings for this task
   prompt: "prompts/tuned-prompts/community_report.txt"
   max_length: 2000

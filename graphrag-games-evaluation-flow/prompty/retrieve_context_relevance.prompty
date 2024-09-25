@@ -5,8 +5,7 @@ model:
   api: chat
   configuration:
     type: azure_openai
-    azure_deployment: gpt-4o
-    api_version: 2024-02-01
+    azure_deployment: gpt-4
     api_key: ${env:AZURE_OPENAI_API_KEY}
     azure_endpoint: ${env:AZURE_OPENAI_ENDPOINT}
   parameters:
